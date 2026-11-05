@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SistemaEstoque.Model.ApplicationDbContext;
+using SistemaEstoque.Services;
 using System.Globalization;
 
 var culture = new CultureInfo("en-US");
@@ -17,6 +18,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ServiceEstoque>();
 
 var app = builder.Build();
 

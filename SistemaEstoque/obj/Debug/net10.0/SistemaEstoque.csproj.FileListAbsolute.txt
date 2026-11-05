@@ -168,3 +168,4 @@ C:\Users\malu0\OneDrive\Documentos\AplicacoesC#\SistemaEstoque\SistemaEstoque\ob
 C:\Users\malu0\OneDrive\Documentos\AplicacoesC#\SistemaEstoque\SistemaEstoque\obj\Debug\net10.0\SistemaEstoque.genruntimeconfig.cache
 C:\Users\malu0\OneDrive\Documentos\AplicacoesC#\SistemaEstoque\SistemaEstoque\obj\Debug\net10.0\ref\SistemaEstoque.dll
 C:\Users\malu0\OneDrive\Documentos\AplicacoesC#\SistemaEstoque\SistemaEstoque\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
+C:\Users\malu0\OneDrive\Documentos\AplicacoesC#\SistemaEstoque\SistemaEstoque\obj\Debug\net10.0\SistemaEstoque.sourcelink.json

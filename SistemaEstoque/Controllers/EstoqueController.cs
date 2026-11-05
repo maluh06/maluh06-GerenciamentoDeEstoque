@@ -12,10 +12,11 @@ namespace SistemaEstoque.Controllers
             private readonly ILogger<EstoqueController> _logger;
             private readonly Context context;
             private readonly ServiceEstoque serviceEstoque;
-            public EstoqueController(Context context, ILogger<EstoqueController> logger)
+            public EstoqueController(Context context, ILogger<EstoqueController> logger, ServiceEstoque serviceEstoque)
             {
                 this.context = context;
                 this._logger = logger;
+                this.serviceEstoque = serviceEstoque;
             }
 
         [HttpGet("ConsultarProduto/{id}")]
@@ -31,13 +32,12 @@ namespace SistemaEstoque.Controllers
                 return BadRequest($"Erro: {x.Message}");
             }
         }
-
-        [HttpPost("CadastrarFornecedor")]
-        public async Task<ActionResult> CadastrarFornecedor(Fornecedor fornecedor)
+        [HttpGet("ConsultarProdutos")]
+        public async Task<ActionResult> GetConsultarTodosOSProdutos()
         {
             try
             {
-                var resultado = await serviceEstoque.PostCadastrarFornecedor(fornecedor);
+                var resultado = await serviceEstoque.GetConsultarTodosOSProdutos();
                 return Ok(resultado);
             }
             catch (Exception x)
@@ -45,6 +45,7 @@ namespace SistemaEstoque.Controllers
                 return BadRequest($"Erro: {x.Message}");
             }
         }
+
         [HttpPost("CadastrarProduto")]
         public async Task<ActionResult> CadastrarProduto(AdicionarProduto produto)
         {
@@ -58,6 +59,20 @@ namespace SistemaEstoque.Controllers
                 return BadRequest($"Erro: {x.Message}");
             }
         }
+        [HttpPut("EditarProduto")]
+        public async Task<ActionResult> PutEditarProduto(int id, double precoCusto, double precoVenda, Fornecedor fornecedor)
+        {
+            try
+            {
+                var editar = await serviceEstoque.PutEditarProduto(id, precoCusto, precoVenda, fornecedor);
+                return Ok(editar);
+            }catch(Exception x)
+            {
+                return BadRequest($"Erro: {x.Message}");
+
+            }
+        }
+
         [HttpPut("ResgistraEntrada")]
         public async Task<ActionResult> PutRegistrarEntrada(int id, int quantidade)
         {

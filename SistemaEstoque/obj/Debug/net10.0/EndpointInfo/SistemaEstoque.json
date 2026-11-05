@@ -28,30 +28,11 @@
         }
       }
     },
-    "/api/Estoque/CadastrarFornecedor": {
-      "post": {
+    "/api/Estoque/ConsultarProdutos": {
+      "get": {
         "tags": [
           "Estoque"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Fornecedor"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Fornecedor"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Fornecedor"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK"
@@ -79,6 +60,63 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/AdicionarProduto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Estoque/EditarProduto": {
+      "put": {
+        "tags": [
+          "Estoque"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "precoCusto",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "precoVenda",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Fornecedor"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Fornecedor"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Fornecedor"
               }
             }
           }

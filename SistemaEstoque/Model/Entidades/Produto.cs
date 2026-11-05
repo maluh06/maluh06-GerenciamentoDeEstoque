@@ -1,5 +1,6 @@
 ﻿using SistemaEstoque.Model.Enum;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SistemaEstoque.Model.Entidades
@@ -31,6 +32,7 @@ namespace SistemaEstoque.Model.Entidades
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? ultimaEntrada { get; set; }
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
     }
 }

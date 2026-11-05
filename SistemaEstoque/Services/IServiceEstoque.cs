@@ -5,12 +5,12 @@ namespace SistemaEstoque.Services
 {
     public interface IServiceEstoque
     {
-        Task<bool> PostCadastrarProduto(AdicionarProduto produto);
-        Task<bool> PutEditarProduto(int id, double precoCusto, double precoVenda, Fornecedor fornecedor);
-        Task<bool> GetConsultarProduto(int id);
-        Task<bool> PostCadastrarFornecedor(Fornecedor fornecedor);
-        Task<bool> PutRegistrarSaida(int id, int quantidade);
-        Task<bool> PutRegistrarEntrada(int id, int quantidade);
+        Task<Produto> PostCadastrarProduto(AdicionarProduto produto);
+        Task<Produto> PutEditarProduto(int id, double precoCusto, double precoVenda, Fornecedor fornecedor);
+        Task<Produto> GetConsultarProduto(int id);
+        Task<List<Produto>> GetConsultarTodosOSProdutos();
+        Task<Produto> PutRegistrarSaida(int id, int quantidade);
+        Task<Produto> PutRegistrarEntrada(int id, int quantidade);
         /*Task<ActionResult<Produto>> GetRelatorioDisposição();
         Task<ActionResult<Produto>> GetMovimentação(DateTime periodoInicial);*/
     }

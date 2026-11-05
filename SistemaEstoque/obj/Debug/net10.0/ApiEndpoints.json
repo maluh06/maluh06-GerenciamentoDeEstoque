@@ -1,22 +1,6 @@
 [
   {
     "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
-    "Method": "CadastrarFornecedor",
-    "RelativePath": "api/Estoque/CadastrarFornecedor",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "fornecedor",
-        "Type": "SistemaEstoque.Model.Entidades.Fornecedor",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
     "Method": "CadastrarProduto",
     "RelativePath": "api/Estoque/CadastrarProduto",
     "HttpMethod": "POST",
@@ -42,6 +26,47 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
+    "Method": "GetConsultarTodosOSProdutos",
+    "RelativePath": "api/Estoque/ConsultarProdutos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
+    "Method": "PutEditarProduto",
+    "RelativePath": "api/Estoque/EditarProduto",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "precoCusto",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "precoVenda",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "fornecedor",
+        "Type": "SistemaEstoque.Model.Entidades.Fornecedor",
         "IsRequired": true
       }
     ],

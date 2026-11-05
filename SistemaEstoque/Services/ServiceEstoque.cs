@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SistemaEstoque.Model.ApplicationDbContext;
 using SistemaEstoque.Model.Entidades;
 
@@ -13,92 +14,84 @@ namespace SistemaEstoque.Services
             _context = context;
         }
 
-        public async Task<bool> GetConsultarProduto(int id)
+        public async Task<Produto> GetConsultarProduto(int id)
         {
             var produto = await _context.Produtos.FindAsync(id);
-            if (produto == null)
+            //criar tratativa caso o ID não exista, com frase personalizada
+            // criar uma mensagem para exbir os dados do produto (override)
+            return produto;
+        }
+
+        public async Task<List<Produto>> GetConsultarTodosOSProdutos()
+        {
+            var produtos = await _context.Produtos.ToListAsync();
+            //criar tratativa caso não tenha nenhum produto cadastrado, com frase personalizada
+            // criar uma mensagem para exbir os dados de cada produto (override)
+
+            return produtos;
+        }
+
+        public async Task<Produto> PostCadastrarProduto(AdicionarProduto produto)
+        {
+            var novoProduto = new Produto
             {
-                return false;
-            }
-            return true;
-        }
+                nome = produto.nome,
+                precoCusto = produto.precoCusto,
+                quantidade = produto.quantidade,
+                categoria = produto.categoria,
+                precoVenda = produto.precoVenda,
+                estoqueMinimo = produto.estoqueMinimo,
+                primeiraEntrada = DateTime.Now,
+                fornecedor = produto.fornecedor
+            };
 
-        public async Task<bool> PostCadastrarFornecedor(Fornecedor fornecedor)
-        {
-            var addFornecedor = await _context.Fornecedores.AddAsync(fornecedor);
+            await _context.Produtos.AddAsync(novoProduto);
+            // criar uma mensagem para exbir os dados do produto (override)
             await _context.SaveChangesAsync();
 
-            return true;
+            return novoProduto;
         }
-
-        public async Task<bool> PostCadastrarProduto(AdicionarProduto produto)
-        {
-            var produtos = await _context.Produtos.AddAsync(
-                new Produto
-                {
-                    nome = produto.nome,
-                    precoCusto = produto.precoCusto,
-                    quantidade = produto.quantidade,
-                    fornecedor = produto.fornecedor,
-                    categoria = produto.categoria,
-                    precoVenda = produto.precoVenda,
-                    estoqueMinimo = produto.estoqueMinimo,
-                    primeiraEntrada = DateTime.Now
-                }
-            );
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> PutEditarProduto(int id, double precoCusto, double precoVenda, Fornecedor fornecedor)
+        public async Task<Produto> PutEditarProduto(int id, double precoCusto, double precoVenda, Fornecedor fornecedor)
         {
             var editar = await _context.Produtos.FindAsync(id);
-            if (editar == null)
-            {
-                return false;
-            }
+            //criar tratativa caso o ID não exista, com frase personalizada
+            // criar uma mensagem para exbir os dados do produto (override)
 
             editar.precoCusto = precoCusto;
             editar.precoVenda = precoVenda;
             editar.fornecedor = fornecedor;
+            editar.ultimaEntrada = DateTime.Now;
+            await _context.SaveChangesAsync();
 
-            return true;
+            return editar;
         }
 
-        public async Task<bool> PutRegistrarEntrada(int id, int quantidade)
+        public async Task<Produto> PutRegistrarEntrada(int id, int quantidade)
         {
             var entrada = await _context.Produtos.FindAsync(id);
-            if (entrada == null)
-            {
-                return false;
-            }
+            //criar tratativa caso o ID não exista, com frase personalizada
+            // criar uma mensagem para exbir os dados do produto (override) exibindo nome do produto e sua quantidade
+
 
             entrada.quantidade += quantidade;
             entrada.ultimaEntrada = DateTime.Now;
-            return true;
+            await _context.SaveChangesAsync();
+
+            return entrada;
         }
 
-        public async Task<bool> PutRegistrarSaida(int id, int quantidade)
+        public async Task<Produto> PutRegistrarSaida(int id, int quantidade)
         {
             var saida = await _context.Produtos.FindAsync(id);
-            if (saida == null)
-            {
-                return false;
-            }
+            //criar tratativa caso o ID não exista, com frase personalizada
+            // criar uma mensagem para exbir os dados do produto (override) exibindo nome do produto e sua quantidade
+            //criar o alerta de estoque mínimo 
+            //criar uma mensagem quando o estoque tiver zerado ou querer tirar uma quantidade que não tem suficiente em estoque
 
-            if (saida.quantidade <= saida.estoqueMinimo)
-            {
-                Console.WriteLine("O produto está abaixo do estoque mínimo.");
-                return false;
-            }
-            if (saida.quantidade - quantidade < 0)
-            {       
-                    Console.WriteLine("A quantidade do produto em estoque é: " + saida.quantidade);
-                return false;
-            }
             saida.quantidade -= quantidade;
             saida.ultimaEntrada = DateTime.Now;
-            return true;
+            await _context.SaveChangesAsync();
+            return saida;
         }
 
         /*public async Task<ActionResult<Prduto>> GetMovimentação(DateTime periodoInicial)
