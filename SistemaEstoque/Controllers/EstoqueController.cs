@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SistemaEstoque.Model.ApplicationDbContext;
 using SistemaEstoque.Model.Entidades;
 using SistemaEstoque.Services;
@@ -24,6 +25,11 @@ namespace SistemaEstoque.Controllers
         {
             try
             {
+                var verificacao = await context.Produtos.FindAsync(id);
+                if (verificacao == null)
+                {
+                    return NotFound("Produto não encontrado. Certifiquese se o ID está correto.");
+                }
                 var resultado = await serviceEstoque.GetConsultarProduto(id);
                 return Ok(resultado);
             }
@@ -37,6 +43,11 @@ namespace SistemaEstoque.Controllers
         {
             try
             {
+                var verificacao = await context.Produtos.ToListAsync();
+                if(verificacao == null)
+                {
+                    return NotFound("Até o momento não foi adicionado nenhum produto no sistema.");
+                }
                 var resultado = await serviceEstoque.GetConsultarTodosOSProdutos();
                 return Ok(resultado);
             }
@@ -64,6 +75,12 @@ namespace SistemaEstoque.Controllers
         {
             try
             {
+                var verificacao = await context.Produtos.FindAsync(id);
+                if (verificacao == null)
+                {
+                    return NotFound("Produto não encontrado. Certifiquese se o ID está correto.");
+                }
+
                 var editar = await serviceEstoque.PutEditarProduto(id, precoCusto, precoVenda, fornecedor);
                 return Ok(editar);
             }catch(Exception x)
@@ -78,6 +95,12 @@ namespace SistemaEstoque.Controllers
         {
             try
             {
+                var verificacao = await context.Produtos.FindAsync(id);
+                if (verificacao == null)
+                {
+                    return NotFound("Produto não encontrado. Certifiquese se o ID está correto.");
+                }
+
                 var resultado = await serviceEstoque.PutRegistrarEntrada(id, quantidade);
                 return Ok(resultado);
             }
@@ -91,7 +114,22 @@ namespace SistemaEstoque.Controllers
         {
             try
             {
+                var verificacao = await context.Produtos.FindAsync(id);
                 var resultado = await serviceEstoque.PutRegistrarSaida(id, quantidade);
+
+
+                if (verificacao == null)
+                {
+                    return NotFound("Produto não encontrado. Certifiquese se o ID está correto.");
+                }
+
+                var subtrair = verificacao.quantidade -= quantidade;
+                if (subtrair < 0)
+                {
+                    return BadRequest(resultado);
+
+                }
+
                 return Ok(resultado);
             }
             catch (Exception x)

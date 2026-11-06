@@ -193,19 +193,26 @@
     "schemas": {
       "AdicionarProduto": {
         "required": [
-          "categoria",
-          "estoqueMinimo",
-          "fornecedor",
-          "nome",
-          "precoCusto",
-          "precoVenda",
-          "quantidade"
+          "estoqueMinimo"
         ],
         "type": "object",
         "properties": {
+          "primeiraEntrada": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ultimaEntrada": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "nome": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "precoCusto": {
             "type": "number",

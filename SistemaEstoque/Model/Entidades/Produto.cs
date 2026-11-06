@@ -8,31 +8,55 @@ namespace SistemaEstoque.Model.Entidades
     public class Produto
     {
         [Required]
+        [Display(Name = "Nome")]
         public string nome { get; set; }
 
         [Required]
+        [Display(Name = "Preço de custo")]
         public double precoCusto { get; set; }
 
         [Required]
+        [Display(Name = "Quantidade")]
         public int quantidade { get; set; }
 
         [Required]
+        [Display(Name = "Fornecedor")]
         public Fornecedor fornecedor { get; set; }
 
         [Required]
+        [Display(Name = "Preço de Venda")]
         public Categorias categoria { get; set; }
 
         [Required]
+        [Display(Name = "Preço de venda")]
         public double precoVenda { get; set; }
 
         [Required]
         public int estoqueMinimo { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime primeiraEntrada { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? ultimaEntrada { get; set; }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Preço de Venda")]
         public int id { get; set; }
+
+        public object GerarMensagem()
+        {
+            return new
+            {
+                Nome = nome,
+                Quantidade = quantidade,
+                Categoria = categoria,
+                PrecoVenda = precoVenda,
+                PrecoCusto = precoCusto,
+                id = id, 
+                estoqueMinimo = estoqueMinimo
+            };
+        }
     }
 }
