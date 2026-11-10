@@ -137,6 +137,40 @@ namespace SistemaEstoque.Controllers
                 return BadRequest($"Erro: {x.Message}");
             }
         }
+
+        [HttpGet("GerarRelatorioMovimentação")]
+        public async Task<ActionResult> GetRelatorioMovimentação()
+        {
+            try
+            {
+                var arquivo = await serviceEstoque.GetMovimentação();
+                string nomeArquivo =
+                $"Relatorio_Movimentacoes_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+
+                return File(arquivo, "text/plain", nomeArquivo);
+            }
+            catch (Exception x)
+            {
+                return BadRequest($"Erro: {x.Message}");
+            }
+        }
+        [HttpGet("GerarRelatorioDisposição")]
+        public async Task<ActionResult> GetRelatorioDisposição()
+        {
+            try
+            {
+                var arquivo = await serviceEstoque.GetRelatorioDisposição();
+                string nomeArquivo =
+                $"Relatorio_Disposicao_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+
+                return File(arquivo, "text/plain", nomeArquivo);
+            }
+            catch (Exception x)
+            {
+                return BadRequest($"Erro: {x.Message}");
+            }
+        }
+
     }
 }
 

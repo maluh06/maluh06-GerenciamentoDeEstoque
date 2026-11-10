@@ -3,12 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using SistemaEstoque.Model.ApplicationDbContext;
 using SistemaEstoque.Model.Entidades;
+using SistemaEstoque.Model.Enum;
+using System.Collections;
 
 namespace SistemaEstoque.Services
 {
-    public class ServiceEstoque : IServiceEstoque
+    public class ServiceEstoque /*: IServiceEstoque*/
     {
         private readonly Context _context;
+
 
         public ServiceEstoque(Context context)
         {
@@ -62,6 +65,16 @@ namespace SistemaEstoque.Services
         {
             var entrada = await _context.Produtos.FindAsync(id);
 
+            var movimentacao = await _context.Movimentacoes.AddAsync(new Movimentacoes
+            {
+                nomeProduto = entrada.nome,
+                idProduto = entrada.id,
+                quantTotal = entrada.quantidade + quantidade,
+                UnidadeMovimentada = quantidade,
+                tipoMovimentacao = Model.Enum.TipoMovimentacao.Entrada,
+                dataEntrada = DateTime.Now
+            });
+
             entrada.quantidade += quantidade;
             entrada.ultimaEntrada = DateTime.Now;
             await _context.SaveChangesAsync();
@@ -72,6 +85,17 @@ namespace SistemaEstoque.Services
         public async Task<String> PutRegistrarSaida(int id, int quantidade)
         {
             var saida = await _context.Produtos.FindAsync(id);
+
+            var movimentacao = await _context.Movimentacoes.AddAsync(new Movimentacoes
+            {
+                nomeProduto = saida.nome,
+                idProduto = saida.id,
+                quantTotal = saida.quantidade - quantidade,
+                UnidadeMovimentada = quantidade,
+                tipoMovimentacao = Model.Enum.TipoMovimentacao.Saida,
+                dataEntrada = DateTime.Now
+            });
+
             var subtrair = saida.quantidade - quantidade;
             saida.ultimaEntrada = DateTime.Now;
 
@@ -91,19 +115,43 @@ namespace SistemaEstoque.Services
             return "Nome do produto: " + saida.nome + "\nQuantidade: " + saida.quantidade + "\nUnidades retiradas: " + quantidade;
         }
 
-        /*public async Task<ActionResult<Prduto>> GetMovimentação(DateTime periodoInicial)
+        public async Task<byte[]> GetMovimentação()
        {
+            var movimentacoes = await _context.Movimentacoes.ToListAsync();
+            string titulo = "RELATÓRIO DE MOVIMENTAÇÕES DE PRODUTOS\n\n";
 
-           // Buscaremos todas as movimentações de entrada e saída de produtos no período informado até o periodo atual
-           // ver sobre estabelecer uma formatação de data 
-           // gerar um arquivo
-       }
+            foreach (var movimentacao in movimentacoes)
+            {
+                titulo += movimentacao.GerarMensagem() + "\n\n";
+            }
 
-       public async Task<ActionResult<Produto>> GetRelatorioDisposição()
+            byte[] arquivo = System.Text.Encoding.UTF8.GetBytes(titulo);
+            return arquivo;
+        }
+
+        public async Task<byte[]> GetRelatorioDisposição()
        {
-           // Ter no arquivo gerado itens: 
-           //                             acima do estoque mínimo, abaixo do estoque mínimo e produtos com estoque zerado.
-           // mostrará nome quantidade, status (acima do estoque mínimo, abaixo do estoque mínimo e produtos com estoque zerado)
-       }*/
+            var produtos = await _context.Produtos.ToListAsync();
+            string titulo = "RELATÓRIO SOBRE A SITUAÇÃO DO ESTOQUE (" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + ")\n\n";
+
+            foreach (var produto in produtos)
+            {
+                if(produto.estoqueMinimo >= produto.quantidade)
+                {
+                    titulo += "Produto: " + produto.nome + "\nQuantidade: " + produto.quantidade + "\nStatus: Abaixo do estoque mínimo\n\n";
+                }
+                else if (produto.quantidade == 0)
+                {
+                    titulo += "Produto: " + produto.nome + "\nQuantidade: " + produto.quantidade + "\nStatus: Estoque zerado\n\n";
+                }
+                else
+                {
+                    titulo += "Produto: " + produto.nome + "\nQuantidade: " + produto.quantidade + "\nStatus: Acima do estoque mínimo\n\n";
+                }
+            }
+
+            byte[] arquivo = System.Text.Encoding.UTF8.GetBytes(titulo);
+            return arquivo;
+        }
     }
 }

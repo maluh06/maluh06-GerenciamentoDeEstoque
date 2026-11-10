@@ -1,0 +1,7 @@
+Relatório de movimentações de produtos
+
+System.Collections.Generic.List`1[SistemaEstoque.Model.Entidades.Movimentacoes]Relatório de movimentações de produtos
+
+System.Collections.Generic.List`1[SistemaEstoque.Model.Entidades.Movimentacoes]Relatório de movimentações de produtos
+
+System.Collections.Generic.List`1[SistemaEstoque.Model.Entidades.Movimentacoes]

@@ -44,6 +44,32 @@ namespace SistemaEstoque.Migrations
                     b.ToTable("Fornecedores");
                 });
 
+            modelBuilder.Entity("SistemaEstoque.Model.Entidades.Movimentacoes", b =>
+                {
+                    b.Property<DateTime>("dataEntrada")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UnidadeMovimentada")
+                        .HasColumnType("int");
+
+                    b.Property<int>("idProduto")
+                        .HasColumnType("int");
+
+                    b.Property<string>("nomeProduto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("quantTotal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tipoMovimentacao")
+                        .HasColumnType("int");
+
+                    b.HasKey("dataEntrada");
+
+                    b.ToTable("Movimentacoes");
+                });
+
             modelBuilder.Entity("SistemaEstoque.Model.Entidades.Produto", b =>
                 {
                     b.Property<int>("id")

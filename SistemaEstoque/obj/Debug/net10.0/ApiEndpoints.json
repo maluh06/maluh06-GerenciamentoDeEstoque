@@ -74,6 +74,26 @@
   },
   {
     "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
+    "Method": "GetRelatorioDisposi\u00E7\u00E3o",
+    "RelativePath": "api/Estoque/GerarRelatorioDisposi\u00E7\u00E3o",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
+    "Method": "GetRelatorioMovimenta\u00E7\u00E3o",
+    "RelativePath": "api/Estoque/GerarRelatorioMovimenta\u00E7\u00E3o",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
     "Method": "PutRegistrarEntrada",
     "RelativePath": "api/Estoque/ResgistraEntrada",
     "HttpMethod": "PUT",
