@@ -15,7 +15,7 @@ namespace SistemaEstoque.Model.Entidades
         public int quantidade { get; set; }
 
         [Display(Name = "Fornecedor")]
-        public Fornecedor fornecedor { get; set; }
+        public string CnpjFornecedor { get; set; }
 
         [Display(Name = "Categoria")]
         public Categorias categoria { get; set; }

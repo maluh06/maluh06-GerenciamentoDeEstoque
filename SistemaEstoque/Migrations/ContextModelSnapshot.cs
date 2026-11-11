@@ -78,15 +78,15 @@ namespace SistemaEstoque.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("CnpjFornecedor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("categoria")
                         .HasColumnType("int");
 
                     b.Property<int>("estoqueMinimo")
                         .HasColumnType("int");
-
-                    b.Property<string>("fornecedorCNPJ")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("nome")
                         .IsRequired()
@@ -109,20 +109,7 @@ namespace SistemaEstoque.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("fornecedorCNPJ");
-
                     b.ToTable("Produtos");
-                });
-
-            modelBuilder.Entity("SistemaEstoque.Model.Entidades.Produto", b =>
-                {
-                    b.HasOne("SistemaEstoque.Model.Entidades.Fornecedor", "fornecedor")
-                        .WithMany()
-                        .HasForeignKey("fornecedorCNPJ")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("fornecedor");
                 });
 #pragma warning restore 612, 618
         }

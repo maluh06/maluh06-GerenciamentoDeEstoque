@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SistemaEstoque.Model.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace SistemaEstoque.Model.Entidades
 {
@@ -17,5 +18,16 @@ namespace SistemaEstoque.Model.Entidades
         [Required]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
+
+        public object GerarMensagem()
+        {
+            return new
+            {
+                Nome = Nome,
+                CNPJ = CNPJ,
+                Telefone = Telefone,
+                Email = Email
+            };
+        }
     }
 }

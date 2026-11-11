@@ -8,7 +8,7 @@ using System.Collections;
 
 namespace SistemaEstoque.Services
 {
-    public class ServiceEstoque /*: IServiceEstoque*/
+    public class ServiceEstoque : IServiceEstoque
     {
         private readonly Context _context;
 
@@ -32,33 +32,68 @@ namespace SistemaEstoque.Services
 
         public async Task<object> PostCadastrarProduto(AdicionarProduto produto)
         {
-            Produto novoProduto = new AdicionarProduto
-            {
-                nome = produto.nome,
-                precoCusto = produto.precoCusto,
-                quantidade = produto.quantidade,
-                categoria = produto.categoria,
-                precoVenda = produto.precoVenda,
-                estoqueMinimo = produto.estoqueMinimo,
-                fornecedor = produto.fornecedor
-                //concertar essa parte de adicionar fornecedor
-            };
+            var validarFornecedor = await _context.Fornecedores.FindAsync(produto.CnpjFornecedor);
 
-            await _context.Produtos.AddAsync(novoProduto);
+            if (validarFornecedor != null)
+            {
+                Produto novoProduto = new AdicionarProduto
+                {
+                    nome = produto.nome,
+                    precoCusto = produto.precoCusto,
+                    quantidade = produto.quantidade,
+                    categoria = produto.categoria,
+                    precoVenda = produto.precoVenda,
+                    estoqueMinimo = produto.estoqueMinimo,
+                    CnpjFornecedor = produto.CnpjFornecedor
+
+                };
+
+                await _context.Produtos.AddAsync(novoProduto);
+                await _context.SaveChangesAsync();
+
+                return novoProduto.GerarMensagem();
+            }
+
+            else{
+                return new { Mensagem = "Fornecedor não encontrado. Certifique-se de que o CNPJ do fornecedor está correto ou cadastre esse fornecedor antes de seguir com a adição do produto." };
+            }
+        }
+
+        public async Task<string> PostCadastrarFornecedor(Fornecedor fornecedor)
+        {
+            var validarFornecedor = await _context.Fornecedores.AddAsync(fornecedor);
             await _context.SaveChangesAsync();
 
-            return novoProduto.GerarMensagem(); 
+            return "Fornecedor cadastrado com sucesso. \n\nCNPJ: " + fornecedor.CNPJ + "\nNome: " + fornecedor.Nome;
         }
-        public async Task<String> PutEditarProduto(int id, double precoCusto, double precoVenda, Fornecedor fornecedor)
+      
+        public async Task<object> GetFornecedores()
+        {
+            var fornecedores = await _context.Fornecedores.ToListAsync();
+            return fornecedores.Select(f => f.GerarMensagem()).ToList();
+        }
+
+        public async Task<object> PutEditarProduto(int id, double precoCusto, double precoVenda, string CnpjFornecedor)
         {
             var editar = await _context.Produtos.FindAsync(id);
-            editar.precoCusto = precoCusto;
-            editar.precoVenda = precoVenda;
-            editar.fornecedor = fornecedor;
-            editar.ultimaEntrada = DateTime.Now;
-            await _context.SaveChangesAsync();
+            var validarFornecedor = await _context.Fornecedores.FindAsync(editar.CnpjFornecedor);
 
-            return editar.GerarMensagem() + "\n Ultima Entrada: " + editar.ultimaEntrada;
+
+            if (validarFornecedor != null)
+            {
+                editar.precoCusto = precoCusto;
+                editar.precoVenda = precoVenda;
+                editar.CnpjFornecedor = CnpjFornecedor;
+                editar.ultimaEntrada = DateTime.Now;
+                await _context.SaveChangesAsync();
+
+                return editar.GerarMensagem() + "\n Ultima Entrada: " + editar.ultimaEntrada;
+            }
+
+            else
+            {
+                return new { Mensagem = "Fornecedor não encontrado. Certifique-se de que o CNPJ do fornecedor está correto ou cadastre esse fornecedor antes de seguir com a adição do produto." };
+            }
         }
 
         public async Task<String> PutRegistrarEntrada(int id, int quantidade)

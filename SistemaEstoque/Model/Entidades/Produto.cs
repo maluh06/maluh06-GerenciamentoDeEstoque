@@ -1,4 +1,5 @@
-﻿using SistemaEstoque.Model.Enum;
+﻿using Microsoft.EntityFrameworkCore;
+using SistemaEstoque.Model.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
@@ -19,9 +20,8 @@ namespace SistemaEstoque.Model.Entidades
         [Display(Name = "Quantidade")]
         public int quantidade { get; set; }
 
-        [Required]
         [Display(Name = "Fornecedor")]
-        public Fornecedor fornecedor { get; set; }
+        public string CnpjFornecedor { get; set; }
 
         [Required]
         [Display(Name = "Preço de Venda")]
@@ -35,7 +35,7 @@ namespace SistemaEstoque.Model.Entidades
         public int estoqueMinimo { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime primeiraEntrada { get; set; }
+        public DateTime? primeiraEntrada { get; set; } = DateTime.Now;
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? ultimaEntrada { get; set; }

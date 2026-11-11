@@ -6,12 +6,15 @@ namespace SistemaEstoque.Services
     public interface IServiceEstoque
     {
         Task<object> PostCadastrarProduto(AdicionarProduto produto);
-        Task<String> PutEditarProduto(int id, double precoCusto, double precoVenda, Fornecedor fornecedor);
+        Task<object> PutEditarProduto(int id, double precoCusto, double precoVenda, string CnpjFornecedor);
         Task<object> GetConsultarProduto(int id);
         Task<List<object>> GetConsultarTodosOSProdutos();
         Task<String> PutRegistrarSaida(int id, int quantidade);
         Task<String> PutRegistrarEntrada(int id, int quantidade);
-        /*Task<ActionResult<Produto>> GetRelatorioDisposição();
-        Task<ActionResult<Produto>> GetMovimentação(DateTime periodoInicial);*/
+        Task<byte[]> GetRelatorioDisposição();
+        Task<byte[]> GetMovimentação();
+        Task<string> PostCadastrarFornecedor(Fornecedor fornecedor);
+        Task<object> GetFornecedores();
+
     }
 }

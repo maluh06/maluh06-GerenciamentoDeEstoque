@@ -1,6 +1,32 @@
 [
   {
     "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
+    "Method": "PostCadastrarFornecedor",
+    "RelativePath": "api/Estoque/CadastrarFornecedor",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fornecedor",
+        "Type": "SistemaEstoque.Model.Entidades.Fornecedor",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
     "Method": "CadastrarProduto",
     "RelativePath": "api/Estoque/CadastrarProduto",
     "HttpMethod": "POST",
@@ -13,6 +39,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
+    "Method": "ConsultarFornecedor",
+    "RelativePath": "api/Estoque/ConsultarFornecedor",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -66,8 +102,8 @@
       },
       {
         "Name": "fornecedor",
-        "Type": "SistemaEstoque.Model.Entidades.Fornecedor",
-        "IsRequired": true
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

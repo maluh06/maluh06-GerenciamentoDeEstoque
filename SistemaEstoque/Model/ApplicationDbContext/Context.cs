@@ -10,6 +10,13 @@ namespace SistemaEstoque.Model.ApplicationDbContext
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Produto>()
+                .Property(p => p.id)
+                .UseIdentityColumn();
+        }
+
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<Fornecedor> Fornecedores { get; set; }
         public DbSet<Movimentacoes> Movimentacoes { get; set; }

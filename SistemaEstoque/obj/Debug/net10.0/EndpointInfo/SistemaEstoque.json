@@ -40,6 +40,66 @@
         }
       }
     },
+    "/api/Estoque/ConsultarFornecedor": {
+      "get": {
+        "tags": [
+          "Estoque"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Estoque/CadastrarFornecedor": {
+      "post": {
+        "tags": [
+          "Estoque"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Fornecedor"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Fornecedor"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Fornecedor"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Estoque/CadastrarProduto": {
       "post": {
         "tags": [
@@ -100,27 +160,15 @@
               "type": "number",
               "format": "double"
             }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Fornecedor"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Fornecedor"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Fornecedor"
-              }
+          },
+          {
+            "name": "fornecedor",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -223,7 +271,8 @@
         "properties": {
           "primeiraEntrada": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "ultimaEntrada": {
             "type": "string",
@@ -246,8 +295,9 @@
             "type": "integer",
             "format": "int32"
           },
-          "fornecedor": {
-            "$ref": "#/components/schemas/Fornecedor"
+          "cnpjFornecedor": {
+            "type": "string",
+            "nullable": true
           },
           "categoria": {
             "$ref": "#/components/schemas/Categorias"

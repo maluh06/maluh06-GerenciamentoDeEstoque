@@ -57,6 +57,35 @@ namespace SistemaEstoque.Controllers
             }
         }
 
+        [HttpGet("ConsultarFornecedor")]
+        public async Task<ActionResult> ConsultarFornecedor()
+        {
+            try
+            {
+                var resultado = await serviceEstoque.GetFornecedores();
+                return Ok(resultado);
+            }
+            catch (Exception x)
+            {
+                return BadRequest($"Erro: {x.Message}");
+            }
+        }
+
+        [HttpPost("CadastrarFornecedor")]
+        public async Task<string> PostCadastrarFornecedor(Fornecedor fornecedor)
+        {
+            try
+            {
+                var resultado = await serviceEstoque.PostCadastrarFornecedor(fornecedor);
+                return resultado;
+
+            }
+            catch (Exception x)
+            {
+                return $"Erro: {x.Message}";
+            }
+        }
+
         [HttpPost("CadastrarProduto")]
         public async Task<ActionResult> CadastrarProduto(AdicionarProduto produto)
         {
@@ -71,7 +100,7 @@ namespace SistemaEstoque.Controllers
             }
         }
         [HttpPut("EditarProduto")]
-        public async Task<ActionResult> PutEditarProduto(int id, double precoCusto, double precoVenda, Fornecedor fornecedor)
+        public async Task<ActionResult> PutEditarProduto(int id, double precoCusto, double precoVenda, string fornecedor)
         {
             try
             {
