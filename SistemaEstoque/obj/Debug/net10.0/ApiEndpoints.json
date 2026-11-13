@@ -27,16 +27,46 @@
   },
   {
     "ContainingType": "SistemaEstoque.Controllers.EstoqueController",
-    "Method": "CadastrarProduto",
+    "Method": "PostCadastrarProduto",
     "RelativePath": "api/Estoque/CadastrarProduto",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "produto",
-        "Type": "SistemaEstoque.Model.Entidades.AdicionarProduto",
-        "IsRequired": true
+        "Name": "nome",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "precoCusto",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "quantidade",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "categorias",
+        "Type": "SistemaEstoque.Model.Enum.Categorias",
+        "IsRequired": false
+      },
+      {
+        "Name": "precoVenda",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "estoqueMinimo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CnpjFornecedor",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

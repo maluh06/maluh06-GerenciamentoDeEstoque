@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SistemaEstoque.Model.ApplicationDbContext;
 using SistemaEstoque.Model.Entidades;
+using SistemaEstoque.Model.Enum;
 using SistemaEstoque.Services;
 
 namespace SistemaEstoque.Controllers
@@ -10,15 +11,15 @@ namespace SistemaEstoque.Controllers
     [Route("api/[controller]")]
     public class EstoqueController : Controller
     {
-            private readonly ILogger<EstoqueController> _logger;
-            private readonly Context context;
-            private readonly ServiceEstoque serviceEstoque;
-            public EstoqueController(Context context, ILogger<EstoqueController> logger, ServiceEstoque serviceEstoque)
-            {
-                this.context = context;
-                this._logger = logger;
-                this.serviceEstoque = serviceEstoque;
-            }
+        private readonly ILogger<EstoqueController> _logger;
+        private readonly Context context;
+        private readonly ServiceEstoque serviceEstoque;
+        public EstoqueController(Context context, ILogger<EstoqueController> logger, ServiceEstoque serviceEstoque)
+        {
+            this.context = context;
+            this._logger = logger;
+            this.serviceEstoque = serviceEstoque;
+        }
 
         [HttpGet("ConsultarProduto/{id}")]
         public async Task<ActionResult> ConsultarProduto(int id)
@@ -44,7 +45,7 @@ namespace SistemaEstoque.Controllers
             try
             {
                 var verificacao = await context.Produtos.ToListAsync();
-                if(verificacao == null)
+                if (verificacao == null)
                 {
                     return NotFound("Até o momento não foi adicionado nenhum produto no sistema.");
                 }
@@ -87,12 +88,22 @@ namespace SistemaEstoque.Controllers
         }
 
         [HttpPost("CadastrarProduto")]
-        public async Task<ActionResult> CadastrarProduto(AdicionarProduto produto)
+        public async Task<ActionResult> PostCadastrarProduto
+             (string nome, double precoCusto, int quantidade, Categorias categorias, double precoVenda, int estoqueMinimo, string CnpjFornecedor)
         {
             try
             {
-                var resultado = await serviceEstoque.PostCadastrarProduto(produto);
-                return Ok(resultado);
+                var validarFornecedor = await context.Fornecedores.FindAsync(CnpjFornecedor);
+
+                if (validarFornecedor != null)
+                {
+                    var resultado = await serviceEstoque.PostCadastrarProduto(nome, precoCusto, quantidade, categorias, precoVenda, estoqueMinimo, CnpjFornecedor);
+                    return Ok(resultado);
+                }
+                else
+                {
+                    return NotFound("Fornecedor não encontrado. Certifique-se de que o CNPJ do fornecedor está correto ou cadastre esse fornecedor antes de seguir com a adição do produto.");
+                }
             }
             catch (Exception x)
             {
@@ -111,8 +122,19 @@ namespace SistemaEstoque.Controllers
                 }
 
                 var editar = await serviceEstoque.PutEditarProduto(id, precoCusto, precoVenda, fornecedor);
-                return Ok(editar);
-            }catch(Exception x)
+                var validarFornecedor = await context.Fornecedores.FindAsync(fornecedor);
+
+                if (validarFornecedor != null)
+                {
+                    return Ok(editar);
+                }
+
+                else
+                {
+                    return NotFound("Fornecedor não encontrado. Certifique-se de que o CNPJ do fornecedor está correto ou cadastre esse fornecedor antes de seguir com a adição do produto.");
+                }
+            }
+            catch (Exception x)
             {
                 return BadRequest($"Erro: {x.Message}");
 

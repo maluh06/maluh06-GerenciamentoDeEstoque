@@ -49,13 +49,14 @@ namespace SistemaEstoque.Model.Entidades
         {
             return new
             {
-                Nome = nome,
-                Quantidade = quantidade,
-                Categoria = categoria,
-                PrecoVenda = precoVenda,
-                PrecoCusto = precoCusto,
-                id = id, 
-                estoqueMinimo = estoqueMinimo
+                id = id,
+                nome = nome,
+                precoCusto = precoCusto,
+                quantidade = quantidade,
+                categoria = categoria,
+                precoVenda = precoVenda,
+                estoqueMinimo = estoqueMinimo,
+                CnpjFornecedor = CnpjFornecedor
             };
         }
     }

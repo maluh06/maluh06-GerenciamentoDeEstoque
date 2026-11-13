@@ -105,25 +105,61 @@
         "tags": [
           "Estoque"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AdicionarProduto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AdicionarProduto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AdicionarProduto"
-              }
+        "parameters": [
+          {
+            "name": "nome",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "precoCusto",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "quantidade",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "categorias",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Categorias"
+            }
+          },
+          {
+            "name": "precoVenda",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "estoqueMinimo",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "CnpjFornecedor",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -263,56 +299,6 @@
   },
   "components": {
     "schemas": {
-      "AdicionarProduto": {
-        "required": [
-          "estoqueMinimo"
-        ],
-        "type": "object",
-        "properties": {
-          "primeiraEntrada": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "ultimaEntrada": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nome": {
-            "type": "string",
-            "nullable": true
-          },
-          "precoCusto": {
-            "type": "number",
-            "format": "double"
-          },
-          "quantidade": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "cnpjFornecedor": {
-            "type": "string",
-            "nullable": true
-          },
-          "categoria": {
-            "$ref": "#/components/schemas/Categorias"
-          },
-          "precoVenda": {
-            "type": "number",
-            "format": "double"
-          },
-          "estoqueMinimo": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
       "Categorias": {
         "enum": [
           0,

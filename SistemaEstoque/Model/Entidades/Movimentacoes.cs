@@ -37,7 +37,7 @@ namespace SistemaEstoque.Model.Entidades
                  "\nNome do produto: " + nomeProduto +
                  "\nQuantidade total em estoque: " + quantTotal +
                  "\nTipo de movimentação: " + tipoMovimentacao + " -> " +
-                  UnidadeMovimentada + " unidades movimentadas: " +
+                  UnidadeMovimentada + " unidades movimentadas " +
                  "\nHorário da movimentação: " + dataEntrada +
                  "\n";
         }

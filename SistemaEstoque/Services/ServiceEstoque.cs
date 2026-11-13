@@ -5,6 +5,7 @@ using SistemaEstoque.Model.ApplicationDbContext;
 using SistemaEstoque.Model.Entidades;
 using SistemaEstoque.Model.Enum;
 using System.Collections;
+using System.Runtime.InteropServices.ObjectiveC;
 
 namespace SistemaEstoque.Services
 {
@@ -30,21 +31,18 @@ namespace SistemaEstoque.Services
             return produtos.Select(p => p.GerarMensagem()).ToList();
         }
 
-        public async Task<object> PostCadastrarProduto(AdicionarProduto produto)
+        public async Task<object> PostCadastrarProduto
+            (string nome, double precoCusto, int quantidade, Categorias categorias, double precoVenda, int estoqueMinimo, string CnpjFornecedor)
         {
-            var validarFornecedor = await _context.Fornecedores.FindAsync(produto.CnpjFornecedor);
-
-            if (validarFornecedor != null)
-            {
-                Produto novoProduto = new AdicionarProduto
+                Produto novoProduto = new Produto
                 {
-                    nome = produto.nome,
-                    precoCusto = produto.precoCusto,
-                    quantidade = produto.quantidade,
-                    categoria = produto.categoria,
-                    precoVenda = produto.precoVenda,
-                    estoqueMinimo = produto.estoqueMinimo,
-                    CnpjFornecedor = produto.CnpjFornecedor
+                    nome = nome,
+                    precoCusto = precoCusto,
+                    quantidade = quantidade,
+                    categoria = categorias,
+                    precoVenda = precoVenda,
+                    estoqueMinimo = estoqueMinimo,
+                    CnpjFornecedor = CnpjFornecedor
 
                 };
 
@@ -52,11 +50,6 @@ namespace SistemaEstoque.Services
                 await _context.SaveChangesAsync();
 
                 return novoProduto.GerarMensagem();
-            }
-
-            else{
-                return new { Mensagem = "Fornecedor não encontrado. Certifique-se de que o CNPJ do fornecedor está correto ou cadastre esse fornecedor antes de seguir com a adição do produto." };
-            }
         }
 
         public async Task<string> PostCadastrarFornecedor(Fornecedor fornecedor)
@@ -76,24 +69,14 @@ namespace SistemaEstoque.Services
         public async Task<object> PutEditarProduto(int id, double precoCusto, double precoVenda, string CnpjFornecedor)
         {
             var editar = await _context.Produtos.FindAsync(id);
-            var validarFornecedor = await _context.Fornecedores.FindAsync(editar.CnpjFornecedor);
-
-
-            if (validarFornecedor != null)
-            {
+           
                 editar.precoCusto = precoCusto;
                 editar.precoVenda = precoVenda;
                 editar.CnpjFornecedor = CnpjFornecedor;
                 editar.ultimaEntrada = DateTime.Now;
                 await _context.SaveChangesAsync();
 
-                return editar.GerarMensagem() + "\n Ultima Entrada: " + editar.ultimaEntrada;
-            }
-
-            else
-            {
-                return new { Mensagem = "Fornecedor não encontrado. Certifique-se de que o CNPJ do fornecedor está correto ou cadastre esse fornecedor antes de seguir com a adição do produto." };
-            }
+                return editar.GerarMensagem();
         }
 
         public async Task<String> PutRegistrarEntrada(int id, int quantidade)
@@ -134,13 +117,13 @@ namespace SistemaEstoque.Services
             var subtrair = saida.quantidade - quantidade;
             saida.ultimaEntrada = DateTime.Now;
 
-            if (subtrair <= saida.estoqueMinimo && subtrair != 0 && subtrair > 0 )
+            if (subtrair <= saida.estoqueMinimo && subtrair >= 0)
             {
                 saida.quantidade -= quantidade;
                 await _context.SaveChangesAsync();
                 return "Esse produto se encontra com o seu estoque baixo. Atualmente há " + saida.quantidade + " unidades em estoque.";
             }
-            else if (subtrair <= 0)
+            else if (subtrair < 0)
             {
                 return "Estoque insuficiente para essa retirada. Atualmente há " + saida.quantidade + " unidades em estoque.";
             }
@@ -171,7 +154,7 @@ namespace SistemaEstoque.Services
 
             foreach (var produto in produtos)
             {
-                if(produto.estoqueMinimo >= produto.quantidade)
+                if(produto.quantidade <= produto.estoqueMinimo && produto.quantidade > 0)
                 {
                     titulo += "Produto: " + produto.nome + "\nQuantidade: " + produto.quantidade + "\nStatus: Abaixo do estoque mínimo\n\n";
                 }
